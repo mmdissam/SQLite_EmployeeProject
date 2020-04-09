@@ -1,5 +1,3 @@
-import 'package:sqflite/sqflite.dart';
-
 class Employee {
   int _id;
   int _age;

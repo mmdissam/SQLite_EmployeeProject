@@ -1,6 +1,4 @@
 /*To connect database with my application, we use this util*/
-import 'dart:math';
-
 import 'package:sqflite/sqflite.dart';
 import 'dart:async';
 import 'package:path/path.dart';
@@ -30,6 +28,7 @@ class DatabaseHelper {
     var db = await openDatabase(path, version: 1, onCreate: _onCreate);
     return db;
   }
+
   _onCreate(Database db, int newVersion) async {
     var sql =
         "CREATE TABLE $tableEmployee ($columnId INTEGER PRIMARY KEY, $columnAge INTEGER,$columnName TEXT,$columnDepartment TEXT, $columnCity TEXT,$columnDescription TEXT)";
@@ -102,7 +101,8 @@ class DatabaseHelper {
       whereArgs: [id],
     );
   }
-  Future closeDB()async{
+
+  Future closeDB() async {
     var dbClient = await db;
     return await dbClient.close();
   }
