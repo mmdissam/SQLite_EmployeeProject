@@ -1,12 +1,12 @@
 class Employee {
   int _id;
-  int _age;
+  String _age;
   String _name;
   String _department;
   String _city;
   String _description;
 
-  Employee(this._id, this._age, this._name, this._department, this._city,
+  Employee(this._age, this._name, this._department, this._city,
       this._description);
 
   Employee.map(dynamic obj) {
@@ -26,7 +26,7 @@ class Employee {
 
   String get name => _name;
 
-  int get age => _age;
+  String get age => _age;
 
   int get id => _id;
 

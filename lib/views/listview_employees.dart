@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:sqlliteproject/models/employee.dart';
 import 'package:sqlliteproject/utils/database_helper.dart';
@@ -127,7 +125,7 @@ class _ListViewEmployeeState extends State<ListViewEmployee> {
         context,
         MaterialPageRoute(
             builder: (context) =>
-                EmployeeScreen(Employee( 1,2 , '', '', '', ''))));
+                EmployeeScreen(Employee('' , '', '', '', ''))));
     if (result == 'save') {
       //To refresh data on screen
       databaseHelper.getAllEmployee().then((employees) {

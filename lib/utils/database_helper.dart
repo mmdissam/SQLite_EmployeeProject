@@ -31,7 +31,7 @@ class DatabaseHelper {
 
   _onCreate(Database db, int newVersion) async {
     var sql =
-        "CREATE TABLE $tableEmployee ($columnId INTEGER PRIMARY KEY, $columnAge INTEGER,$columnName TEXT,$columnDepartment TEXT, $columnCity TEXT,$columnDescription TEXT)";
+        "CREATE TABLE $tableEmployee ($columnId INTEGER PRIMARY KEY, $columnAge TEXT,$columnName TEXT,$columnCity TEXT,$columnDepartment TEXT, $columnDescription TEXT)";
     await db.execute(sql);
   }
 
