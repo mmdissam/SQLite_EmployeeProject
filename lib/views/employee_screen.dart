@@ -23,41 +23,48 @@ class _EmployeeScreenState extends State<EmployeeScreen> {
 
   @override
   void initState() {
-    _ageController = TextEditingController(text: '${widget.employee.age}');
-    _nameController = TextEditingController(text: widget.employee.name);
-    _departmentController =
-        TextEditingController(text: widget.employee.department);
-    _cityController = TextEditingController(text: widget.employee.city);
-    _descriptionController =
-        TextEditingController(text: widget.employee.description);
     super.initState();
+    setState(() {
+      _ageController = TextEditingController(text: '${widget.employee.age}');
+      _nameController = TextEditingController(text: widget.employee.name);
+      _departmentController =
+          TextEditingController(text: widget.employee.department);
+      _cityController = TextEditingController(text: widget.employee.city);
+      _descriptionController =
+          TextEditingController(text: widget.employee.description);
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+//      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: Text('EmployeeDB'),
         centerTitle: true,
       ),
-      body: Container(
-        margin: EdgeInsets.all(15),
-        alignment: Alignment.center,
-        child: Column(
-          children: <Widget>[
-            _name(),
-            SizedBox(height: 15),
-            _age(),
-            SizedBox(height: 15),
-            _department(),
-            SizedBox(height: 15),
-            _city(),
-            SizedBox(height: 15),
-            _description(),
-            SizedBox(height: 15),
-            _updateOrAdd(),
-          ],
-        ),
+      body: ListView(
+        children: <Widget>[
+          Container(
+            margin: EdgeInsets.all(15),
+            alignment: Alignment.center,
+            child: Column(
+              children: <Widget>[
+                _name(),
+                SizedBox(height: 15),
+                _age(),
+                SizedBox(height: 15),
+                _department(),
+                SizedBox(height: 15),
+                _city(),
+                SizedBox(height: 15),
+                _description(),
+                SizedBox(height: 15),
+                _updateOrAdd(),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -110,6 +117,16 @@ class _EmployeeScreenState extends State<EmployeeScreen> {
 
   Widget _updateOrAdd() {
     return RaisedButton(
+      color: Colors.deepPurpleAccent,
+      child: (widget.employee.id != null)
+          ? Text(
+              'Update',
+              style: TextStyle(color: Colors.white),
+            )
+          : Text(
+              'Add',
+              style: TextStyle(color: Colors.white),
+            ),
       onPressed: () {
         if (widget.employee.id != null) {
           _onPressedUpdate();
@@ -117,25 +134,23 @@ class _EmployeeScreenState extends State<EmployeeScreen> {
           _onPressedAdd();
         }
       },
-      child: (widget.employee.id != null) ? Text('Update') : Text('Add'),
     );
   }
 
   void _onPressedUpdate() {
-    if (widget.employee.id != null) {
-      databaseHelper
-          .updateEmployee(Employee.fromMap({
-        'id': widget.employee.id,
-        'age': widget.employee.age,
-        'name': widget.employee.name,
-        'department': widget.employee.department,
-        'city': widget.employee.city,
-        'description': widget.employee.description,
-      }))
-          .then((_) {
-        Navigator.pop(context, 'Update');
-      });
-    }
+    databaseHelper
+        .updateEmployee(Employee.fromMap({
+      // We take the ID from database and we take else from controller
+      'id': widget.employee.id,
+      'age': _ageController.text,
+      'name': _nameController.text,
+      'department': _departmentController.text,
+      'city': _cityController.text,
+      'description': _descriptionController.text,
+    }))
+        .then((_) {
+      Navigator.pop(context, 'update');
+    });
   }
 
   void _onPressedAdd() {

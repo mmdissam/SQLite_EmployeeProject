@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sqlliteproject/models/employee.dart';
 import 'package:sqlliteproject/utils/database_helper.dart';
+import 'package:sqlliteproject/views/employee_info.dart';
 import 'package:sqlliteproject/views/employee_screen.dart';
 
 class ListViewEmployee extends StatefulWidget {
@@ -35,15 +36,13 @@ class _ListViewEmployeeState extends State<ListViewEmployee> {
       ),
       body: Center(
         child: ListView.builder(
-          padding: EdgeInsets.all(15),
+          padding: EdgeInsets.all(5),
           itemCount: items.length,
           itemBuilder: (context, position) {
             return Column(
               children: <Widget>[
-                Divider(
-                  height: 15,
-                ),
                 _allInfo(position),
+                Divider(height: 15),
               ],
             );
           },
@@ -59,36 +58,46 @@ class _ListViewEmployeeState extends State<ListViewEmployee> {
 
   Widget _allInfo(int position) {
     return ListTile(
-      title: Text(
-        '${items[position].name}',
-        style: TextStyle(color: Colors.blue),
-      ),
-      subtitle: Text(
-        '${items[position].age} - ${items[position].city} - ${items[position].department} - ${items[position].description}',
-        style: TextStyle(fontStyle: FontStyle.italic),
-      ),
-      leading: Column(
-        children: <Widget>[
-          Padding(padding: EdgeInsets.all(20)),
-          CircleAvatar(
-            backgroundColor: Colors.tealAccent,
-            radius: 18,
-            child: Text(
-              '${items[position].id}',
-              style: TextStyle(color: Colors.black),
-            ),
-          ),
-          IconButton(
-              icon: Icon(
-                Icons.delete,
-                color: Colors.red.shade900,
-              ),
-              onPressed: () =>
-                  _deleteEmployee(context, items[position], position)),
-        ],
-      ),
+      trailing: _trailing(position),
+      title: _title(position),
+      subtitle: _subTitle(position),
+      leading: _leading(position),
       onTap: () => _navigateToEmployee(context, items[position]),
+      onLongPress: () => _navigateToEmployeeInfo(context, items[position]),
     );
+  }
+
+  Widget _title(int position) {
+    return Text(
+      '${items[position].name}',
+      style: TextStyle(color: Colors.blue),
+    );
+  }
+
+  Widget _subTitle(int position) {
+    return Text(
+      '${items[position].age} - ${items[position].city} - ${items[position].department} - ${items[position].description}',
+      style: TextStyle(fontStyle: FontStyle.italic),
+    );
+  }
+
+  Widget _leading(int position) {
+    return CircleAvatar(
+      backgroundColor: Colors.tealAccent,
+      child: Text(
+        '${items[position].id}',
+        style: TextStyle(color: Colors.black),
+      ),
+    );
+  }
+
+  Widget _trailing(int position) {
+    return IconButton(
+        icon: Icon(
+          Icons.delete,
+          color: Colors.red.shade900,
+        ),
+        onPressed: () => _deleteEmployee(context, items[position], position));
   }
 
   void _deleteEmployee(
@@ -119,14 +128,22 @@ class _ListViewEmployeeState extends State<ListViewEmployee> {
       });
     }
   }
+  void _navigateToEmployeeInfo(BuildContext context, Employee employee) async {
+    await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => EmployeeInfo(employee),
+      ),
+    );
+  }
 
   void _addNewEmployee(BuildContext context) async {
     String result = await Navigator.push(
         context,
         MaterialPageRoute(
             builder: (context) =>
-                EmployeeScreen(Employee('' , '', '', '', ''))));
-    if (result == 'save') {
+                EmployeeScreen(Employee('', '', '', '', ''))));
+    if (result == 'Add') {
       //To refresh data on screen
       databaseHelper.getAllEmployee().then((employees) {
         setState(() {
